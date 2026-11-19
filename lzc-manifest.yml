@@ -1,0 +1,63 @@
+application:
+  subdomain: opentodo
+  multi_instance: false
+  upstreams:
+    - location: /
+      backend: http://opentodo:8080/
+
+services:
+  opentodo:
+    # upstream: ghcr.io/opentodoapp/opentodo:1.5.0
+    # 镜像地址由 GitHub Action 按上游最新版本改写（镜像模式）
+    image: ghcr.io/opentodoapp/opentodo:1.5.0
+    # 上游镜像以非 root 用户 65532 运行。run_as 同时把 /lzcapp 下的持久目录
+    # owner 映射成同一个 UID，数据目录才能正常写入（需要 lzcos v1.6.0+）。
+    run_as: "65532:65532"
+    environment:
+      - OPENTODO_ADDR=:8080
+      - OPENTODO_DATA_DIR=/data
+      # 对外地址固定为本应用域名：Cookie 会标记 Secure、启用 HSTS 与通行密钥，
+      # 同时避免「以域名打开但没有 base URL」时首启要求输入初始化码。
+      - OPENTODO_BASE_URL=https://{{ .S.AppDomain }}
+    healthcheck:
+      # 镜像自带的健康检查（distroless 里没有 shell，用 exec 形式）
+      test:
+        - CMD
+        - /opentodo
+        - healthcheck
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    binds:
+      # 数据库、附件与推送密钥都放在 /data，这里持久化到微服的 /lzcapp/var/data，
+      # 升级或重装都不会丢。
+      - /lzcapp/var/data:/data
+
+usage: |
+  OpenTodo 是一款自托管的开源待办与任务管理应用：数据全部留在你自己的懒猫微服里，
+  不依赖任何云服务，安装后所有设备（电脑、手机、平板）都能实时同步同一份任务。
+
+  【第一次使用】
+  1. 打开应用，第一个访问者会创建「主人」账号（owner），它拥有全部管理权限。
+  2. 登录后在「设置 → 人员 → 用户与邀请」里生成单次邀请链接，发给家人或同事，
+     他们用链接创建自己的账号；不开放注册时只有你能加人。
+  3. 应用默认需要先通过懒猫微服的账号密码进入，再进入 OpenTodo 自己的账号，
+     两层保护同时生效。
+
+  【主要功能】
+  - 任务、项目、看板、分区、标签、提醒、习惯打卡与时间记录，多设备实时同步。
+  - 日历（CalDAV）订阅：主人开启后，系统日历可以直接订阅任务日历。
+  - 提醒与桌面推送：应用地址是 https，浏览器推送可用。
+  - 通行密钥（Passkey）：主人账号开启后可用无密码登录，需要 https 地址。
+  - 备份与迁移：设置页可以导出/导入数据归档，也支持把数据存到 S3 或 WebDAV。
+
+  【数据】
+  - 全部数据（含数据库、附件、推送密钥）保存在微服的 /lzcapp/var/data 目录，
+    升级、重装都不会丢；需要备份时直接整目录拷走即可。
+
+  【说明】
+  - 本应用采用上游官方镜像（ghcr.io/opentodoapp/opentodo）运行，未做源码修改；
+    版本升级由打包仓库的 GitHub Action 定期检查上游并自动发布。
+  - 应用自带账号体系，未接入懒猫微服的免密登录。
+  - 上游项目地址：https://github.com/OpenTodoApp/OpenTodo

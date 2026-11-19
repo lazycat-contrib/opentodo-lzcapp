@@ -1,0 +1,44 @@
+version: 1
+
+project:
+  root: .
+  build_config: lzc-build.yml
+  package_file: package.yml
+  output: dist/opentodo.lpk
+  target_arch: amd64
+
+update:
+  strategy: publish
+  allow_downgrade: false
+  version_source:
+    type: image
+    image: opentodo
+
+build:
+  toolchains: []
+  run_buildscript: false
+
+images:
+  - id: opentodo
+    target: service
+    service: opentodo
+    # 完整 registry 路径：上游只发 ghcr，写裸名字会被当成 Docker Hub 而找不到
+    source: ghcr.io/opentodoapp/opentodo
+    channel: stable
+    sort: semver
+    # 上游版本 tag 为三段 SemVer（1.5.0）；latest / stable / main 与 sha256-* 都不是版本 tag
+    tag_regex: '^[0-9]+[.][0-9]+[.][0-9]+$'
+    delivery:
+      # 镜像模式：用镜像代理加速拉取，并校验代理上的 digest 与上游一致
+      mode: mirror
+      require_digest_match: true
+
+stores:
+  official:
+    # 官方商店审核要求免密登录与文件选择器拦截，本应用暂不提交官方商店
+    enabled: false
+  private:
+    enabled: true
+    skip_if_version_exists: true
+    name: OpenTodo
+    summary: "自托管的开源待办与任务管理应用：本地优先、多设备实时同步，支持多用户、看板、标签、日历与提醒。"

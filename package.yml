@@ -1,0 +1,21 @@
+package: community.lazycat.app.opentodo
+version: 1.5.0
+name: OpenTodo
+description: "自托管的开源待办与任务管理应用：本地优先、多设备实时同步，支持多用户、看板、标签、日历与提醒。"
+min_os_version: "1.6.0"
+homepage: https://github.com/OpenTodoApp/OpenTodo
+author: OpenTodoApp
+license: AGPL-3.0
+permissions:
+  required:
+    - net.internet
+locales:
+  zh:
+    name: "OpenTodo 待办"
+    description: "自托管的开源待办与任务管理应用：本地优先、多设备实时同步，支持多用户、看板、标签、日历与提醒。"
+  zh_CN:
+    name: "OpenTodo 待办"
+    description: "自托管的开源待办与任务管理应用：本地优先、多设备实时同步，支持多用户、看板、标签、日历与提醒。"
+  en:
+    name: "OpenTodo"
+    description: "Self-hosted, open-source task manager: local-first, real-time sync across devices, with multiple users, boards, labels, calendar and reminders."
