@@ -4,12 +4,11 @@ application:
   upstreams:
     - location: /
       backend: http://opentodo:8080/
-
 services:
   opentodo:
     # upstream: ghcr.io/opentodoapp/opentodo:1.5.0
     # 镜像地址由 GitHub Action 按上游最新版本改写（镜像模式）
-    image: ghcr.io/opentodoapp/opentodo:1.5.0
+    image: ghcr.1ms.run/opentodoapp/opentodo:1.5.0
     # 上游镜像以非 root 用户 65532 运行。run_as 同时把 /lzcapp 下的持久目录
     # owner 映射成同一个 UID，数据目录才能正常写入（需要 lzcos v1.6.0+）。
     run_as: "65532:65532"
@@ -33,7 +32,6 @@ services:
       # 数据库、附件与推送密钥都放在 /data，这里持久化到微服的 /lzcapp/var/data，
       # 升级或重装都不会丢。
       - /lzcapp/var/data:/data
-
 usage: |
   OpenTodo 是一款自托管的开源待办与任务管理应用：数据全部留在你自己的懒猫微服里，
   不依赖任何云服务，安装后所有设备（电脑、手机、平板）都能实时同步同一份任务。
