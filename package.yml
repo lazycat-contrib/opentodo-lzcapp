@@ -11,10 +11,10 @@ permissions:
     - net.internet
 locales:
   zh:
-    name: "OpenTodo 待办"
+    name: "OpenTodo"
     description: "自托管的开源待办与任务管理应用：本地优先、多设备实时同步，支持多用户、看板、标签、日历与提醒。"
   zh_CN:
-    name: "OpenTodo 待办"
+    name: "OpenTodo"
     description: "自托管的开源待办与任务管理应用：本地优先、多设备实时同步，支持多用户、看板、标签、日历与提醒。"
   en:
     name: "OpenTodo"
