@@ -1,5 +1,5 @@
 package: community.lazycat.app.opentodo
-version: 1.7.0
+version: 1.9.0
 name: OpenTodo
 description: "自托管的开源待办与任务管理应用：本地优先、多设备实时同步，支持多用户、看板、标签、日历与提醒。"
 min_os_version: "1.6.0"
