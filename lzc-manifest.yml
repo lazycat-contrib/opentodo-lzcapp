@@ -6,9 +6,9 @@ application:
       backend: http://opentodo:8080/
 services:
   opentodo:
-    # upstream: ghcr.io/opentodoapp/opentodo:1.9.0
+    # upstream: ghcr.io/opentodoapp/opentodo:1.10.3
     # 镜像地址由 GitHub Action 按上游最新版本改写（镜像模式）
-    image: ghcr.1ms.run/opentodoapp/opentodo:1.9.0
+    image: ghcr.1ms.run/opentodoapp/opentodo:1.10.3
     # 上游镜像以非 root 用户 65532 运行。run_as 同时把 /lzcapp 下的持久目录
     # owner 映射成同一个 UID，数据目录才能正常写入（需要 lzcos v1.6.0+）。
     run_as: "65532:65532"
